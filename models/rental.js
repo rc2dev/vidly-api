@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
 // Em customer, podemos precisar de isGold para dar um deconto.
 // Em movie, precisaremos de dailyRentalRate para calcular a rental fee.
@@ -62,8 +62,8 @@ const Rental = mongoose.model("Rental", new mongoose.Schema({
 // Idem para dateReturned e rentalFee.
 function validateRental(rental) {
   const schema = {
-    movieId: Joi.string().required(),
-    customerId: Joi.string().required(),
+    movieId: Joi.objectId().required(),
+    customerId: Joi.objectId().required(),
   }
   return Joi.validate(rental, schema);
 }
