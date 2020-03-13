@@ -1,16 +1,26 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
-// Não precisamos definir genreSchema separado,
+// Não precisamos definir rentalSchema separado,
 // porque aqui é o único lugar onde o usamos.
-const Customer = mongoose.model(
-  'Customer',
-  new mongoose.Schema({
-    name: { type: String, required: true, minlength: 3, maxlength: 50 },
-    isGold: { type: Boolean, default: false },
-    phone: { type: String, required: true, minlength: 3, maxlength: 50 }
-  })
-);
+const Customer = mongoose.model('Customer', new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlength: 50
+  },
+  isGold: {
+    type: Boolean,
+    default: false
+  },
+  phone: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlength: 50
+  }
+}));
 
 function validateCustomer(customer) {
   const schema = {

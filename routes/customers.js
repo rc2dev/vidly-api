@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
-  if (error) return res.send(400, error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
 
   const customer = new Customer({
     name: req.body.name,
@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const { error } = validate(req.body);
-  if (error) return res.send(400, error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
 
   const customer = await Customer.findByIdAndUpdate(
     req.params.id,
@@ -35,7 +35,7 @@ router.put('/:id', async (req, res) => {
     { new: true }
   );
   if (!customer)
-    return res.send(404, "Couldn't find the customer with that ID");
+    return res.status(404).send("Couldn't find the customer with that ID");
 
   res.send(customer);
 });
@@ -43,14 +43,14 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const customer = await Customer.findByIdAndRemove(req.params.id);
   if (!customer)
-    return res.send(404, "Couldn't find the customer with that ID");
+    return res.status(404).send("Couldn't find the customer with that ID");
   res.send(customer);
 });
 
 router.get('/:id', async (req, res) => {
   const customer = await Customer.findById(req.params.id);
   if (!customer)
-    return res.send(404, "Couldn't find the customer with that ID");
+    return res.status(404).send("Couldn't find the customer with that ID");
 
   res.send(customer);
 });
