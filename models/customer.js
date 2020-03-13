@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
+// Não precisamos definir genreSchema separado,
+// porque aqui é o único lugar onde o usamos.
 const Customer = mongoose.model(
   'Customer',
   new mongoose.Schema({
