@@ -19,13 +19,12 @@ router.post('/', auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  // O prof usou let aqui e depois salvou em genre em vez de result.
   const genre = new Genre({
     name: req.body.name
   });
-  const result = await genre.save();
+  await genre.save();
 
-  res.send(result);
+  res.send(genre);
 });
 
 // O prof usou "update first" aqui. Disse que podia qualquer um dos dois métodos.
