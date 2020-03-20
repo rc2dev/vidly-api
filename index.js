@@ -4,11 +4,11 @@ require('winston-mongodb');
 const config = require('config');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
-const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 
 require('./startup/routes')(app);
+require('./startup/db')();
 
 winston.exceptions.handle(
   new winston.transports.File({ filename: 'exceptions.log' })
