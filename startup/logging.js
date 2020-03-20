@@ -14,6 +14,10 @@ module.exports = function() {
   });
 
   winston.add(
+    new winston.transports.Console({ format: winston.format.simple() })
+  );
+
+  winston.add(
     new winston.transports.File({
       filename: 'logfile.log',
       format: winston.format.combine(
