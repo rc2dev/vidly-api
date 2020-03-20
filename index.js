@@ -15,14 +15,12 @@ const auth = require('./routes/auth');
 const express = require('express');
 const app = express();
 
-process.on('uncaughtException', ex => {
-  winston.error(ex);
-  process.exit(1);
-});
+winston.exceptions.handle(
+  new winston.transports.File({ filename: 'exceptions.log' })
+);
 
 process.on('unhandledRejection', ex => {
-  winston.error(ex);
-  process.exit(1);
+  throw ex;
 });
 
 winston.add(
