@@ -15,13 +15,36 @@ const auth = require('./routes/auth');
 const express = require('express');
 const app = express();
 
-winston.add(new winston.transports.File({ filename: 'logfile.log' }));
+process.on('uncaughtException', ex => {
+  winston.error(ex);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', ex => {
+  winston.error(ex);
+  process.exit(1);
+});
+
+winston.add(
+  new winston.transports.File({
+    filename: 'logfile.log',
+    format: winston.format.combine(
+      winston.format.timestamp({
+        format: 'YYYY-MM-DD hh:mm:ss A ZZ'
+      }),
+      winston.format.json()
+    )
+  })
+);
+
 winston.add(
   new winston.transports.MongoDB({
     db: 'mongodb://localhost/vidly',
     metaKey: 'meta'
   })
 );
+
+const p = Promise.reject('Something failed miserably');
 
 if (!config.get('jwtPrivateKey')) {
   console.error('FATAL ERROR: jwtPrivateKey is not defined.');
