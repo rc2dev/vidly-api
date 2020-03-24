@@ -29,7 +29,8 @@ router.post('/', auth, async (req, res) => {
   res.send(genre);
 });
 
-// O prof usou "update first" aqui. Disse que podia qualquer um dos dois métodos.
+// The instructor used "update first" here, but pointed
+// that it could be any of the two methods.
 router.put('/:id', auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
-// Não precisamos definir rentalSchema separado,
-// porque aqui é o único lugar onde o usamos.
+// No need to define rentalScheme separetely,
+// since this is the only place we use it.
 const Customer = mongoose.model(
   'Customer',
   new mongoose.Schema({
