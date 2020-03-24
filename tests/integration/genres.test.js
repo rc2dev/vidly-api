@@ -1,6 +1,6 @@
 const request = require('supertest');
-const mongoose = require('mongoose');
 const { Genre } = require('../../models/genre');
+const { User } = require('../../models/user');
 
 let server;
 
@@ -29,7 +29,7 @@ describe('/api/genres', () => {
     });
   });
 
-  describe('GET /:id', async () => {
+  describe('GET /:id', () => {
     it('should return genre if valid id is passed', async () => {
       const genre = new Genre({ name: 'genre1' });
       await genre.save();
@@ -44,6 +44,65 @@ describe('/api/genres', () => {
       const res = await request(server).get('/api/genres/1');
 
       expect(res.status).toBe(404);
+    });
+  });
+
+  describe('POST /', () => {
+    it('should return 401 if client is not logged in', async () => {
+      const res = await request(server).post('/api/genres');
+
+      expect(res.status).toBe(401);
+    });
+
+    // Vamos escrever mais de um teste pro validate, porque há várias
+    // possibilidades de o input ser inválido.
+    it('should return 400 if genre is less than 3 characters', async () => {
+      const token = new User().generateAuthToken();
+
+      const res = await request(server)
+        .post('/api/genres')
+        .set('x-auth-token', token)
+        .send({ name: 'aa' });
+
+      expect(res.status).toBe(400);
+    });
+
+    it('should return 400 if genre is more than 50 characters', async () => {
+      const token = new User().generateAuthToken();
+
+      const name = new Array(52).join('a');
+
+      const res = await request(server)
+        .post('/api/genres')
+        .set('x-auth-token', token)
+        .send({ name });
+
+      expect(res.status).toBe(400);
+    });
+
+    it('should save the genre if it is valid', async () => {
+      const token = new User().generateAuthToken();
+
+      const res = await request(server)
+        .post('/api/genres')
+        .set('x-auth-token', token)
+        .send({ name: 'genre1' });
+
+      const genre = await Genre.find({ name: 'genre1' });
+
+      expect(genre).not.toBeNull();
+    });
+
+    it('should return the genre if it is valid', async () => {
+      const token = new User().generateAuthToken();
+
+      const res = await request(server)
+        .post('/api/genres')
+        .set('x-auth-token', token)
+        .send({ name: 'genre1' });
+
+      expect(res.body).toHaveProperty('_id');
+      expect(res.body).toHaveProperty('name', 'genre1');
     });
   });
 });
