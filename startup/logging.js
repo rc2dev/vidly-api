@@ -1,7 +1,7 @@
 // In this module, we place everything related to handling and logging errors.
 
 const winston = require('winston');
-// require('winston-mongodb');
+require('winston-mongodb');
 require('express-async-errors');
 
 module.exports = function() {
@@ -28,10 +28,10 @@ module.exports = function() {
       )
     })
   );
-  // winston.add(
-  //   new winston.transports.MongoDB({
-  //     db: 'mongodb://localhost/vidly',
-  //     metaKey: 'meta'
-  //   })
-  // );
+  winston.add(
+    new winston.transports.MongoDB({
+      db: 'mongodb://localhost/vidly',
+      metaKey: 'meta'
+    })
+  );
 };
