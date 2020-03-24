@@ -1,4 +1,5 @@
 const request = require('supertest');
+const mongoose = require('mongoose');
 const { Genre } = require('../../models/genre');
 const { User } = require('../../models/user');
 
@@ -30,7 +31,7 @@ describe('/api/genres', () => {
   });
 
   describe('GET /:id', () => {
-    it('should return genre if valid id is passed', async () => {
+    it('should return genre if genre with given id exists', async () => {
       const genre = new Genre({ name: 'genre1' });
       await genre.save();
 
@@ -42,6 +43,13 @@ describe('/api/genres', () => {
 
     it('should return 404 if invalid id is passed', async () => {
       const res = await request(server).get('/api/genres/1');
+
+      expect(res.status).toBe(404);
+    });
+
+    it('should return 404 if no genre with given id exists', async () => {
+      const id = mongoose.Types.ObjectId();
+      const res = await request(server).get(`/api/genres/${id}`);
 
       expect(res.status).toBe(404);
     });
