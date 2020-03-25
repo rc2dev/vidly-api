@@ -1,9 +1,10 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const moment = require('moment');
 
-// Em customer, podemos precisar de isGold para dar um deconto.
-// Em movie, precisaremos de dailyRentalRate para calcular a rental fee.
-// Incluindo ambos, não precisamos de uma additional query para calcular a rental fee.
+// In customer, we may need isGold to give a discount.
+// In movie, we need dailyRentalRate to calculate rentalFee.
+// Including both, we don't need an additional query to calculate rentalFee.
 const rentalSchema = new mongoose.Schema({
   customer: {
     type: new mongoose.Schema({
@@ -63,6 +64,13 @@ rentalSchema.statics.lookup = function(customerId, movieId) {
     'customer._id': customerId,
     'movie._id': movieId
   });
+};
+
+rentalSchema.methods.return = function() {
+  this.dateReturned = new Date();
+
+  const rentalDays = moment().diff(this.dateOut, 'days');
+  this.rentalFee = rentalDays * this.movie.dailyRentalRate;
 };
 
 const Rental = mongoose.model('Rental', rentalSchema);
