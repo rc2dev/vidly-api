@@ -4,6 +4,7 @@ const app = express();
 
 // Logging first, just in case we get an error when loading other modules.
 require('./startup/logging')();
+require('./startup/cors')(app);
 require('./startup/routes')(app);
 require('./startup/db')();
 require('./startup/config')();
