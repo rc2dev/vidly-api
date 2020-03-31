@@ -85,5 +85,4 @@ function validateRental(rental) {
   return Joi.validate(rental, schema);
 }
 
-exports.Rental = Rental;
-exports.validate = validateRental;
+module.exports = { Rental, validateRental };
